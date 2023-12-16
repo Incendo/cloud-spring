@@ -1,0 +1,28 @@
+name: Build cloud-spring
+on:
+    push:
+        branches: [ "**" ]
+        tags-ignore: [ "**" ]
+    pull_request:
+    release:
+        types: [ released ]
+jobs:
+    build:
+        # Only run on PRs if the source branch is on someone else's repo
+        if: ${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}
+        runs-on: "ubuntu-latest"
+        steps:
+            - uses: actions/checkout@v3
+            - uses: gradle/wrapper-validation-action@v1
+            - name: Set up JDK
+              uses: actions/setup-java@v3
+              with:
+                  distribution: 'temurin'
+                  java-version: 17
+            - name: Build
+              run: ./gradlew build
+            - name : Test Summary
+              uses : EnricoMi/publish-unit-test-result-action@v2.2.0
+              with :
+                  junit_files : "**/build/test-results/test/TEST-*.xml"
+              if : always()
