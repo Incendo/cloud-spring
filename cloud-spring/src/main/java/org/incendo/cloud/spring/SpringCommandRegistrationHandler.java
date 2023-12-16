@@ -23,21 +23,23 @@
 //
 package org.incendo.cloud.spring;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import org.immutables.value.Value;
+import cloud.commandframework.Command;
+import cloud.commandframework.internal.CommandRegistrationHandler;
+import org.apiguardian.api.API;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PACKAGE})
-@Retention(RetentionPolicy.SOURCE)
-@Value.Style(
-        typeImmutable = "*",
-        typeImmutableEnclosing = "*",
-        typeAbstract = "Abstract*",
-        forceJacksonPropertyNames = false,
-        deferCollectionAllocation = true,
-        optionalAcceptNullable = true
-)
-public @interface ImmutableStyle {
+@Component
+@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
+public class SpringCommandRegistrationHandler<C> implements CommandRegistrationHandler<C> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringCommandRegistrationHandler.class);
+
+    @Override
+    public final boolean registerCommand(final @NonNull Command<C> command) {
+        LOGGER.debug("Registering command: {}", command);
+        return false;
+    }
 }

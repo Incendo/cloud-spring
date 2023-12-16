@@ -15,6 +15,7 @@ checkerQual = "3.40.0"
 apiguardian = "1.1.2"
 immutables = "2.9.2"
 slf4j = "2.0.9"
+cloud = "2.0.0-SNAPSHOT"
 
 springShellBom = "3.1.6"
 
@@ -38,6 +39,10 @@ spring-shell = { group = "org.springframework.shell", name = "spring-shell-start
 spring-shell-dependencies = { group = "org.springframework.shell", name = "spring-shell-dependencies", version.ref = "springShellBom" }
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+
+# Cloud
+cloud-core = { group = "cloud.commandframework", name = "cloud-core", version.ref = "cloud" }
+cloud-annotations = { group = "cloud.commandframework", name = "cloud-annotations", version.ref = "cloud" }
 
 # Test
 jupiterApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "jupiter" }

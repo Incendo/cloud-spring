@@ -1,0 +1,11 @@
+---
+spring:
+    profiles:
+        active: local
+
+    application:
+        name: cloud-spring-example
+
+logging:
+    level:
+        org.incendo: debug

@@ -21,43 +21,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring;
+package org.incendo.cloud.spring.config;
 
+import cloud.commandframework.annotations.AnnotationParser;
 import org.apiguardian.api.API;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.immutables.value.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Configuration;
 
-@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "0.0.1")
-public class DummyClass {
+/**
+ * Configuration for cloud-annotations.
+ * <p>
+ * This will only be loaded if cloud-annotations is present on the classpath.
+ *
+ * @since 1.0.0
+ */
+@Configuration
+@ConditionalOnClass(AnnotationParser.class)
+@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
+public class CloudAnnotationConfig {
 
-    private final Dummy dummy;
-
-    /**
-     * Creates a new dummy class
-     */
-    public DummyClass() {
-        this.dummy = Dummy.builder().dummyCount(10).build();
-    }
-
-    /**
-     * Returns the dummy.
-     *
-     * @return dummy
-     */
-    public @NonNull Dummy dummy() {
-        return this.dummy;
-    }
-
-
-    @Value.Immutable
-    @ImmutableStyle
-    public interface AbstractDummy {
-
-        /**
-         * Returns the number of dummies.
-         *
-         * @return number of dummies
-         */
-        int dummyCount();
-    }
 }

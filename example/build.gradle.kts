@@ -4,5 +4,6 @@ plugins {
 }
 
 dependencies {
-    api(project(":cloud-spring"))
+    implementation(project(":cloud-spring"))
+    implementation(libs.cloud.annotations)
 }

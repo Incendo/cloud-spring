@@ -21,35 +21,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring.config;
+package org.incendo.cloud.spring;
 
-import cloud.commandframework.execution.CommandExecutionCoordinator;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.spring.SpringCommandExecutionCoordinatorResolver;
-import org.incendo.cloud.spring.SpringCommandPermissionHandler;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
- * Spring configuration for cloud-spring.
+ * Function used to determine whether the shell has a given permission node.
  *
- * @since 1.0.0
+ * @param <C> the command sender type
  */
-@Configuration
-@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
-public class CloudSpringConfig {
+@FunctionalInterface
+@API(status = API.Status.STABLE, since = "1.0.0")
+public interface SpringCommandPermissionHandler<C> {
 
-    @Bean
-    @ConditionalOnMissingBean(SpringCommandPermissionHandler.class)
-    @NonNull SpringCommandPermissionHandler<?> commandPermissionHandler() {
-        return SpringCommandPermissionHandler.alwaysTrue();
+    /**
+     * Returns a {@link SpringCommandPermissionHandler} that always returns {@code true}.
+     *
+     * @param <C> the command sender type
+     * @return the permission handler
+     */
+    static <C> @NonNull SpringCommandPermissionHandler<C> alwaysTrue() {
+        return permission -> true;
     }
 
-    @Bean
-    @ConditionalOnMissingBean(SpringCommandExecutionCoordinatorResolver.class)
-    @NonNull SpringCommandExecutionCoordinatorResolver<?> commandExecutionCoordinatorResolver() {
-        return CommandExecutionCoordinator.simpleCoordinator()::apply;
-    }
+    /**
+     * Returns whether the shell has the given {@code permission}.
+     *
+     * @param permission the permission
+     * @return {@code true} if the shell has the permission, {@code false} if not
+     */
+    boolean hasPermission(@NonNull String permission);
 }

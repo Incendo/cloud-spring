@@ -21,35 +21,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring.config;
+package org.incendo.cloud.spring;
 
+import cloud.commandframework.CommandTree;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
+import java.util.function.Function;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.spring.SpringCommandExecutionCoordinatorResolver;
-import org.incendo.cloud.spring.SpringCommandPermissionHandler;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-/**
- * Spring configuration for cloud-spring.
- *
- * @since 1.0.0
- */
-@Configuration
-@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
-public class CloudSpringConfig {
+@API(status = API.Status.STABLE, since = "1.0.0")
+public interface SpringCommandExecutionCoordinatorResolver<C> extends Function<@NonNull CommandTree<C>,
+        @NonNull CommandExecutionCoordinator<C>> {
 
-    @Bean
-    @ConditionalOnMissingBean(SpringCommandPermissionHandler.class)
-    @NonNull SpringCommandPermissionHandler<?> commandPermissionHandler() {
-        return SpringCommandPermissionHandler.alwaysTrue();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(SpringCommandExecutionCoordinatorResolver.class)
-    @NonNull SpringCommandExecutionCoordinatorResolver<?> commandExecutionCoordinatorResolver() {
-        return CommandExecutionCoordinator.simpleCoordinator()::apply;
-    }
 }
