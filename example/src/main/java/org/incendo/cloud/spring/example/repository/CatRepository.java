@@ -21,28 +21,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring;
+package org.incendo.cloud.spring.example.repository;
 
-import org.apiguardian.api.API;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.cloud.spring.example.model.Cat;
+import org.springframework.stereotype.Repository;
 
-/**
- * Dummy command sender type for spring.
- *
- * @since 1.0.0
- */
-@API(status = API.Status.STABLE, since = "1.0.0")
-public interface SpringCommandSender {
+@Repository
+public class CatRepository {
 
-    SpringCommandSender INSTANCE = new SpringCommandSender() {
-    };
+    private final Map<@NonNull String, @NonNull Cat> cats = new HashMap<>();
 
     /**
-     * Returns the sender instance.
+     * Adds the cat.
      *
-     * @return the sender instance
+     * @param cat the cat
      */
-    static @NonNull SpringCommandSender sender() {
-        return INSTANCE;
+    public void addCat(final @NonNull Cat cat) {
+        this.cats.put(cat.name(), cat);
+    }
+
+    /**
+     * Removes the cat with the given {@code name}.
+     *
+     * @param name the name
+     * @return the removed cat, or {@code null}
+     */
+    public @Nullable Cat removeCat(final @NonNull String name) {
+        return this.cats.remove(name);
+    }
+
+    /**
+     * Returns the cats.
+     *
+     * @return the cats
+     */
+    public @NonNull Collection<@NonNull Cat> cats() {
+        return List.copyOf(this.cats.values());
     }
 }

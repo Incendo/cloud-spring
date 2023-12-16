@@ -21,28 +21,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring;
+package org.incendo.cloud.spring.annotation;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.apiguardian.api.API;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- * Dummy command sender type for spring.
- *
- * @since 1.0.0
+ * Add this to a bean to make it get auto-parsed by the {@link cloud.commandframework.annotations.AnnotationParser}.
  */
+@Target({ElementType.TYPE, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface SpringCommandSender {
+public @interface ScanCommands {
 
-    SpringCommandSender INSTANCE = new SpringCommandSender() {
-    };
-
-    /**
-     * Returns the sender instance.
-     *
-     * @return the sender instance
-     */
-    static @NonNull SpringCommandSender sender() {
-        return INSTANCE;
-    }
 }

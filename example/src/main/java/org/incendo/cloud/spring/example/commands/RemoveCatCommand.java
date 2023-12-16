@@ -25,35 +25,53 @@ package org.incendo.cloud.spring.example.commands;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandBean;
-import cloud.commandframework.CommandDescription;
 import cloud.commandframework.CommandProperties;
 import cloud.commandframework.context.CommandContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.SpringCommandSender;
+import org.incendo.cloud.spring.example.model.Cat;
+import org.incendo.cloud.spring.example.service.CatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import static cloud.commandframework.arguments.standard.StringParser.greedyStringParser;
+import static cloud.commandframework.CommandDescription.commandDescription;
+import static cloud.commandframework.arguments.standard.StringParser.stringParser;
 
 @Component
-public class CommandInfo extends CommandBean<SpringCommandSender> {
+public class RemoveCatCommand extends CommandBean<SpringCommandSender> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommandInfo.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RemoveCatCommand.class);
+
+    private final CatService catService;
+
+    /**
+     * Creates a new command instance.
+     *
+     * @param catService the cat service
+     */
+    public RemoveCatCommand(final @NonNull CatService catService) {
+        this.catService = catService;
+    }
 
     @Override
     protected @NonNull CommandProperties properties() {
-        return CommandProperties.of("info");
+        return CommandProperties.of("cat");
     }
 
     @Override
     protected Command.Builder<SpringCommandSender> configure(final Command.Builder<SpringCommandSender> builder) {
-        return builder.commandDescription(CommandDescription.commandDescription("An informational command."))
-                .required("string", greedyStringParser());
+        return builder.literal("remove").required("name", stringParser()).commandDescription(commandDescription("Remove a cat"));
     }
 
     @Override
-    public void execute(final @NonNull CommandContext<SpringCommandSender> commandContext) {
-        LOGGER.info("much info yes: {}", commandContext.<String>get("string"));
+    public void execute(@NonNull final CommandContext<SpringCommandSender> commandContext) {
+        final String name = commandContext.get("name");
+        final Cat cat = this.catService.removeCat(name);
+        if (cat == null) {
+            LOGGER.error("No such cat :(");
+        } else {
+            LOGGER.info("Removed cat {}", cat.name());
+        }
     }
 }

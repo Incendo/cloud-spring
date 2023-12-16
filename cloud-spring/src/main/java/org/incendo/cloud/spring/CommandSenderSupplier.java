@@ -26,23 +26,13 @@ package org.incendo.cloud.spring;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-/**
- * Dummy command sender type for spring.
- *
- * @since 1.0.0
- */
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface SpringCommandSender {
-
-    SpringCommandSender INSTANCE = new SpringCommandSender() {
-    };
+public interface CommandSenderSupplier<C> {
 
     /**
-     * Returns the sender instance.
+     * Supplies the command sender.
      *
-     * @return the sender instance
+     * @return the sender
      */
-    static @NonNull SpringCommandSender sender() {
-        return INSTANCE;
-    }
+    @NonNull C supply();
 }

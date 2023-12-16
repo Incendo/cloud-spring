@@ -21,28 +21,56 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring;
+package org.incendo.cloud.spring.event;
 
+import cloud.commandframework.Command;
+import java.io.Serial;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.shell.command.CommandContext;
 
-/**
- * Dummy command sender type for spring.
- *
- * @since 1.0.0
- */
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface SpringCommandSender {
+public final class CommandExecutionEvent<C> extends ApplicationEvent {
 
-    SpringCommandSender INSTANCE = new SpringCommandSender() {
-    };
+    @Serial
+    private static final long serialVersionUID = 5191664996917201150L;
+
+    private final Command<C> command;
+    private final CommandContext context;
 
     /**
-     * Returns the sender instance.
+     * Creates a new event.
      *
-     * @return the sender instance
+     * @param command the command
+     * @param context the command context
      */
-    static @NonNull SpringCommandSender sender() {
-        return INSTANCE;
+    public CommandExecutionEvent(final Command<C> command, final @NonNull CommandContext context) {
+        super(command);
+        this.command = command;
+        this.context = context;
+    }
+
+    /**
+     * Returns the command.
+     *
+     * @return the command
+     */
+    public @NonNull Command<C> command() {
+        return this.command;
+    }
+
+    /**
+     * Returns the context.
+     *
+     * @return the context
+     */
+    public @NonNull CommandContext context() {
+        return this.context;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("CommandExecutionEvent{command=%s,context=%s}", this.command(), this.context());
     }
 }

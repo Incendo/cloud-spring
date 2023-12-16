@@ -24,24 +24,40 @@
 package org.incendo.cloud.spring;
 
 import cloud.commandframework.CommandManager;
+import cloud.commandframework.context.CommandInput;
+import cloud.commandframework.exceptions.ArgumentParseException;
+import cloud.commandframework.exceptions.InvalidCommandSenderException;
+import cloud.commandframework.exceptions.InvalidSyntaxException;
+import cloud.commandframework.exceptions.NoPermissionException;
+import cloud.commandframework.exceptions.NoSuchCommandException;
 import jakarta.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.spring.event.CommandExecutionEvent;
 import org.incendo.cloud.spring.registrar.CommandRegistrar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @API(status = API.Status.STABLE, since = "1.0.0")
 public class SpringCommandManager<C> extends CommandManager<C> {
 
+    private static final String MESSAGE_INTERNAL_ERROR = "An internal error occurred while attempting to perform this command.";
+    private static final String MESSAGE_INVALID_SYNTAX = "Invalid Command Syntax. Correct command syntax is: ";
+    private static final String MESSAGE_NO_PERMS = "I'm sorry, but you do not have permission to perform this command. "
+            + "Please contact the server administrators if you believe that this is in error.";
+    private static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringCommandManager.class);
 
     private final SpringCommandPermissionHandler<C> commandPermissionHandler;
     private final Collection<@NonNull CommandRegistrar<C>> commandRegistrars;
+    private final CommandSenderSupplier<C> commandSenderSupplier;
 
     /**
      * Creates a new command manager.
@@ -50,16 +66,21 @@ public class SpringCommandManager<C> extends CommandManager<C> {
      * @param commandPermissionHandler the permission handler
      * @param commandRegistrationHandler the registration handler
      * @param commandRegistrars registrars that provide commands
+     * @param commandSenderSupplier the supplier of the custom command sender type
      */
     public SpringCommandManager(
             final @NonNull SpringCommandExecutionCoordinatorResolver<C> commandExecutionCoordinatorResolver,
             final @NonNull SpringCommandPermissionHandler<C> commandPermissionHandler,
             final @NonNull SpringCommandRegistrationHandler<C> commandRegistrationHandler,
-            final @NonNull Collection<@NonNull CommandRegistrar<C>> commandRegistrars
+            final @NonNull Collection<@NonNull CommandRegistrar<C>> commandRegistrars,
+            final @NonNull CommandSenderSupplier<C> commandSenderSupplier
     ) {
         super(commandExecutionCoordinatorResolver, commandRegistrationHandler);
         this.commandPermissionHandler = commandPermissionHandler;
         this.commandRegistrars = List.copyOf(commandRegistrars);
+        this.commandSenderSupplier = commandSenderSupplier;
+
+        this.registerDefaultExceptionHandlers();
     }
 
     @Override
@@ -71,5 +92,23 @@ public class SpringCommandManager<C> extends CommandManager<C> {
     void registerCommands() {
         LOGGER.debug("Registering commands");
         this.commandRegistrars.forEach(registrar -> registrar.registerCommands(this));
+    }
+
+    @EventListener(CommandExecutionEvent.class)
+    void commandExecutionEvent(final @NonNull CommandExecutionEvent<C> event) {
+        final CommandInput commandInput = CommandInput.of(Arrays.asList(event.context().getRawArgs()));
+        this.executeCommand(this.commandSenderSupplier.supply(), commandInput.input());
+    }
+
+    private void registerDefaultExceptionHandlers() {
+        this.exceptionController()
+                .registerHandler(Throwable.class, ctx -> LOGGER.error(MESSAGE_INTERNAL_ERROR, ctx.exception()))
+                .registerHandler(ArgumentParseException.class, ctx -> LOGGER.error("Invalid Command Argument: {}",
+                        ctx.exception().getCause().getMessage()))
+                .registerHandler(NoSuchCommandException.class, ctx -> LOGGER.error(MESSAGE_UNKNOWN_COMMAND))
+                .registerHandler(NoPermissionException.class, ctx -> LOGGER.error(MESSAGE_NO_PERMS))
+                .registerHandler(InvalidCommandSenderException.class, ctx -> LOGGER.error(ctx.exception().getMessage()))
+                .registerHandler(InvalidSyntaxException.class,
+                        ctx -> LOGGER.error(MESSAGE_INVALID_SYNTAX + ctx.exception().getCorrectSyntax()));
     }
 }

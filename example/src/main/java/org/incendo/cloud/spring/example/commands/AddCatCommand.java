@@ -25,35 +25,54 @@ package org.incendo.cloud.spring.example.commands;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandBean;
-import cloud.commandframework.CommandDescription;
 import cloud.commandframework.CommandProperties;
+import cloud.commandframework.arguments.flags.CommandFlag;
 import cloud.commandframework.context.CommandContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.SpringCommandSender;
+import org.incendo.cloud.spring.example.model.Cat;
+import org.incendo.cloud.spring.example.service.CatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import static cloud.commandframework.arguments.standard.StringParser.greedyStringParser;
+import static cloud.commandframework.CommandDescription.commandDescription;
+import static cloud.commandframework.arguments.standard.StringParser.stringParser;
 
 @Component
-public class CommandInfo extends CommandBean<SpringCommandSender> {
+public class AddCatCommand extends CommandBean<SpringCommandSender> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommandInfo.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddCatCommand.class);
+
+    private final CatService catService;
+
+    /**
+     * Creates a new command instance.
+     *
+     * @param catService the cat service
+     */
+    public AddCatCommand(final @NonNull CatService catService) {
+        this.catService = catService;
+    }
 
     @Override
     protected @NonNull CommandProperties properties() {
-        return CommandProperties.of("info");
+        return CommandProperties.of("cat");
     }
 
     @Override
     protected Command.Builder<SpringCommandSender> configure(final Command.Builder<SpringCommandSender> builder) {
-        return builder.commandDescription(CommandDescription.commandDescription("An informational command."))
-                .required("string", greedyStringParser());
+        return builder.literal("add")
+                .required("name", stringParser())
+                .flag(CommandFlag.builder("override"))
+                .commandDescription(commandDescription("Add a cat"));
     }
 
     @Override
-    public void execute(final @NonNull CommandContext<SpringCommandSender> commandContext) {
-        LOGGER.info("much info yes: {}", commandContext.<String>get("string"));
+    public void execute(@NonNull final CommandContext<SpringCommandSender> commandContext) {
+        final String name = commandContext.get("name");
+        final boolean override = commandContext.flags().hasFlag("override");
+        final Cat cat = this.catService.addCat(name, override);
+        LOGGER.info("Added cat {}", cat.name());
     }
 }

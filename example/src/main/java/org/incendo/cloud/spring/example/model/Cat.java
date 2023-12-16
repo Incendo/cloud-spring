@@ -21,28 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring;
+package org.incendo.cloud.spring.example.model;
 
-import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Dummy command sender type for spring.
+ * A kitty.
  *
- * @since 1.0.0
+ * @param name the name of the cat
  */
-@API(status = API.Status.STABLE, since = "1.0.0")
-public interface SpringCommandSender {
+public record Cat(@NonNull String name) {
 
-    SpringCommandSender INSTANCE = new SpringCommandSender() {
-    };
-
-    /**
-     * Returns the sender instance.
-     *
-     * @return the sender instance
-     */
-    static @NonNull SpringCommandSender sender() {
-        return INSTANCE;
-    }
 }

@@ -25,11 +25,13 @@ package org.incendo.cloud.spring.registrar;
 
 import cloud.commandframework.CommandBean;
 import java.util.List;
+import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.springframework.stereotype.Component;
 
 @Component
+@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
 public class BeanRegistrar<C> implements CommandRegistrar<C> {
 
     private final List<@NonNull CommandBean<C>> commandBeans;
