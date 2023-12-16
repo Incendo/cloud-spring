@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  org.incendo.cloud.spring.config.CloudSpringConfig

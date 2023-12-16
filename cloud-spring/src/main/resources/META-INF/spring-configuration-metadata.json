@@ -1,0 +1,11 @@
+{
+    "groups": [
+        {
+            "name": "incendo.cloud",
+            "description": "Configuration for cloud-spring"
+        }
+    ],
+    "properties": [
+        {}
+    ]
+}
