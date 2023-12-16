@@ -27,7 +27,9 @@ import cloud.commandframework.Command;
 import cloud.commandframework.CommandBean;
 import cloud.commandframework.CommandProperties;
 import cloud.commandframework.context.CommandContext;
+import cloud.commandframework.meta.CommandMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.incendo.cloud.spring.example.model.Cat;
 import org.incendo.cloud.spring.example.service.CatService;
@@ -62,6 +64,11 @@ public class RemoveCatCommand extends CommandBean<SpringCommandSender> {
     @Override
     protected Command.Builder<SpringCommandSender> configure(final Command.Builder<SpringCommandSender> builder) {
         return builder.literal("remove").required("name", stringParser()).commandDescription(commandDescription("Remove a cat"));
+    }
+
+    @Override
+    protected @NonNull CommandMeta meta() {
+        return CommandMeta.builder().with(SpringCommandManager.COMMAND_GROUP_KEY, "Cat").build();
     }
 
     @Override

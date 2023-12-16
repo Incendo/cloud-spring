@@ -28,6 +28,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.CommandSenderSupplier;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
+import org.incendo.cloud.spring.annotation.CommandGroup;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -46,6 +47,12 @@ public class ExampleConfig {
     @NonNull AnnotationParser<SpringCommandSender> annotationParser(
             final @NonNull SpringCommandManager<SpringCommandSender> commandManager
     ) {
-        return new AnnotationParser<>(commandManager, SpringCommandSender.class);
+        final AnnotationParser<SpringCommandSender> annotationParser = new AnnotationParser<>(
+                commandManager,
+                SpringCommandSender.class
+        );
+        annotationParser.registerBuilderModifier(CommandGroup.class,
+                (annotation, builder) -> builder.meta(SpringCommandManager.COMMAND_GROUP_KEY, annotation.value()));
+        return annotationParser;
     }
 }

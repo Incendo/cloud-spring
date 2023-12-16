@@ -28,7 +28,9 @@ import cloud.commandframework.CommandBean;
 import cloud.commandframework.CommandProperties;
 import cloud.commandframework.arguments.flags.CommandFlag;
 import cloud.commandframework.context.CommandContext;
+import cloud.commandframework.meta.CommandMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.incendo.cloud.spring.example.model.Cat;
 import org.incendo.cloud.spring.example.service.CatService;
@@ -58,6 +60,11 @@ public class AddCatCommand extends CommandBean<SpringCommandSender> {
     @Override
     protected @NonNull CommandProperties properties() {
         return CommandProperties.of("cat");
+    }
+
+    @Override
+    protected @NonNull CommandMeta meta() {
+        return CommandMeta.builder().with(SpringCommandManager.COMMAND_GROUP_KEY, "Cat").build();
     }
 
     @Override

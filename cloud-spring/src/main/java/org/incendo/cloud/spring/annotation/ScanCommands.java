@@ -32,6 +32,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Add this to a bean to make it get auto-parsed by the {@link cloud.commandframework.annotations.AnnotationParser}.
+ *
+ * @since 1.0.0
  */
 @Target({ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

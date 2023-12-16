@@ -92,6 +92,7 @@ public class SpringCommandRegistrationHandler<C> implements CommandRegistrationH
                             .toList();
                 })
                 .and()*/
+                .group(command.commandMeta().getOrDefault(SpringCommandManager.COMMAND_GROUP_KEY, null))
                 .build();
         this.commandCatalog.register(registration);
 

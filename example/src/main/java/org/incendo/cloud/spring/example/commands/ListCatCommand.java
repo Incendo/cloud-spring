@@ -26,6 +26,7 @@ package org.incendo.cloud.spring.example.commands;
 import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.spring.annotation.CommandGroup;
 import org.incendo.cloud.spring.annotation.ScanCommands;
 import org.incendo.cloud.spring.example.service.CatService;
 import org.slf4j.Logger;
@@ -52,6 +53,7 @@ public class ListCatCommand {
     /**
      * Command that lists all registered cats.
      */
+    @CommandGroup("Cat")
     @CommandDescription("List the cats")
     @CommandMethod("cat list")
     public void listCats() {

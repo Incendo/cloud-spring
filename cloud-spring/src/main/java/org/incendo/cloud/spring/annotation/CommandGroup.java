@@ -21,23 +21,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring.config;
+package org.incendo.cloud.spring.annotation;
 
-import cloud.commandframework.annotations.AnnotationParser;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.apiguardian.api.API;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Configuration;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Configuration for cloud-annotations.
- * <p>
- * This will only be loaded if cloud-annotations is present on the classpath.
+ * Sets the spring-shell command group for the command.
  *
  * @since 1.0.0
  */
-@Configuration
-@ConditionalOnClass(AnnotationParser.class)
-@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
-public class CloudAnnotationConfig {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@API(status = API.Status.STABLE, since = "1.0.0")
+public @interface CommandGroup {
 
+    /**
+     * Returns the group name.
+     *
+     * @return the group name
+     */
+    @NonNull String value();
 }

@@ -30,6 +30,7 @@ import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.exceptions.NoPermissionException;
 import cloud.commandframework.exceptions.NoSuchCommandException;
+import cloud.commandframework.keys.CloudKey;
 import java.util.Arrays;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -42,6 +43,8 @@ import org.springframework.stereotype.Component;
 @Component
 @API(status = API.Status.STABLE, since = "1.0.0")
 public class SpringCommandManager<C> extends CommandManager<C> {
+
+    public static final CloudKey<String> COMMAND_GROUP_KEY = CloudKey.of("group", String.class);
 
     private static final String MESSAGE_INTERNAL_ERROR = "An internal error occurred while attempting to perform this command.";
     private static final String MESSAGE_INVALID_SYNTAX = "Invalid Command Syntax. Correct command syntax is: ";
