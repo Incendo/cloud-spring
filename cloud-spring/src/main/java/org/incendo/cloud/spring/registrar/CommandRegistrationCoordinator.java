@@ -21,41 +21,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring.example.commands;
+package org.incendo.cloud.spring.registrar;
 
-import cloud.commandframework.annotations.CommandDescription;
-import cloud.commandframework.annotations.CommandMethod;
+import jakarta.annotation.PostConstruct;
+import java.util.Collection;
+import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.spring.annotation.ScanCommands;
-import org.incendo.cloud.spring.example.service.CatService;
+import org.incendo.cloud.spring.SpringCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@ScanCommands
-@Component
-public class ListCatCommand {
+@SuppressWarnings({"unchecked", "rawtypes"})
+@Service
+public class CommandRegistrationCoordinator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ListCatCommand.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandRegistrationCoordinator.class);
 
-    private final CatService catService;
+    private final SpringCommandManager commandManager;
+    private final Collection<@NonNull CommandRegistrar> commandRegistrars;
 
     /**
-     * Creates a new command instance.
+     * Creates a new registration coordinator.
      *
-     * @param catService the cat service
+     * @param commandManager the command manager
+     * @param commandRegistrars the registrars that provide commands
      */
-    public ListCatCommand(final @NonNull CatService catService) {
-        this.catService = catService;
+    public CommandRegistrationCoordinator(
+            final @NonNull SpringCommandManager<?> commandManager,
+            final @NonNull Collection<@NonNull CommandRegistrar<?>> commandRegistrars
+    ) {
+        this.commandManager = commandManager;
+        this.commandRegistrars = List.copyOf(commandRegistrars);
     }
 
-    /**
-     * Command that lists all registered cats.
-     */
-    @CommandDescription("List the cats")
-    @CommandMethod("cat list")
-    public void listCats() {
-        LOGGER.info("Cats");
-        this.catService.cats().forEach(cat -> LOGGER.info("- {}", cat.name()));
+    @PostConstruct
+    void registerCommands() {
+        LOGGER.debug("Registering commands");
+        this.commandRegistrars.forEach(registrar -> registrar.registerCommands(this.commandManager));
     }
 }

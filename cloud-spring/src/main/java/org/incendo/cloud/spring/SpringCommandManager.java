@@ -30,14 +30,10 @@ import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.exceptions.NoPermissionException;
 import cloud.commandframework.exceptions.NoSuchCommandException;
-import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.event.CommandExecutionEvent;
-import org.incendo.cloud.spring.registrar.CommandRegistrar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -56,7 +52,6 @@ public class SpringCommandManager<C> extends CommandManager<C> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringCommandManager.class);
 
     private final SpringCommandPermissionHandler<C> commandPermissionHandler;
-    private final Collection<@NonNull CommandRegistrar<C>> commandRegistrars;
     private final CommandSenderSupplier<C> commandSenderSupplier;
 
     /**
@@ -65,19 +60,16 @@ public class SpringCommandManager<C> extends CommandManager<C> {
      * @param commandExecutionCoordinatorResolver the resolver for the execution coordinator
      * @param commandPermissionHandler the permission handler
      * @param commandRegistrationHandler the registration handler
-     * @param commandRegistrars registrars that provide commands
      * @param commandSenderSupplier the supplier of the custom command sender type
      */
     public SpringCommandManager(
             final @NonNull SpringCommandExecutionCoordinatorResolver<C> commandExecutionCoordinatorResolver,
             final @NonNull SpringCommandPermissionHandler<C> commandPermissionHandler,
             final @NonNull SpringCommandRegistrationHandler<C> commandRegistrationHandler,
-            final @NonNull Collection<@NonNull CommandRegistrar<C>> commandRegistrars,
             final @NonNull CommandSenderSupplier<C> commandSenderSupplier
     ) {
         super(commandExecutionCoordinatorResolver, commandRegistrationHandler);
         this.commandPermissionHandler = commandPermissionHandler;
-        this.commandRegistrars = List.copyOf(commandRegistrars);
         this.commandSenderSupplier = commandSenderSupplier;
 
         this.registerDefaultExceptionHandlers();
@@ -86,12 +78,6 @@ public class SpringCommandManager<C> extends CommandManager<C> {
     @Override
     public final boolean hasPermission(final @NonNull C sender, final @NonNull String permission) {
         return this.commandPermissionHandler.hasPermission(permission);
-    }
-
-    @PostConstruct
-    void registerCommands() {
-        LOGGER.debug("Registering commands");
-        this.commandRegistrars.forEach(registrar -> registrar.registerCommands(this));
     }
 
     @EventListener(CommandExecutionEvent.class)
