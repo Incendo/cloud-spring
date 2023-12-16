@@ -1,9 +1,0 @@
-- Create binding for CommandManager
-- Allow for command creation using beans (make use of CommandBean)
-- Map commands to spring-shell
-
-Annotations:
-- Add an auto-discovery annotation or interface that we autowire & parse
-
-Example:
-- Create a small microservice to showcase commands
