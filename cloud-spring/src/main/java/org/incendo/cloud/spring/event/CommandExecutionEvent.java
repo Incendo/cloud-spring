@@ -30,6 +30,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.shell.command.CommandContext;
 
+/**
+ * Event emitted when a command is executed.
+ *
+ * @param <C> the command sender type
+ * @since 1.0.0
+ */
 @API(status = API.Status.STABLE, since = "1.0.0")
 public final class CommandExecutionEvent<C> extends ApplicationEvent {
 

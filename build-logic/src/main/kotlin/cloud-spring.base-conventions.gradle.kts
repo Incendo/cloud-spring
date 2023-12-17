@@ -55,6 +55,5 @@ dependencies {
 
 fun DependencyHandlerScope.testDependencies() {
     testImplementation(libs.truth)
-    testImplementation(libs.jupiterEngine)
-    testImplementation(libs.jupiterApi)
+    testImplementation(libs.awaitility)
 }

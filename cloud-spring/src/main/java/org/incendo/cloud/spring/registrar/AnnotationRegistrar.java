@@ -30,9 +30,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.annotation.ScanCommands;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+@ConditionalOnClass(AnnotationParser.class)
 @ConditionalOnBean(AnnotationParser.class)
 @Component
 @API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")

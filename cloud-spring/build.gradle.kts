@@ -20,4 +20,6 @@ dependencies {
     compileOnlyApi(libs.cloud.annotations)
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.shell.test)
+    testImplementation(libs.spring.shell.test.autoconfiguration)
 }

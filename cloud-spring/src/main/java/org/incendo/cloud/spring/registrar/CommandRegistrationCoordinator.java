@@ -26,6 +26,7 @@ package org.incendo.cloud.spring.registrar;
 import jakarta.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
+import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 @Service
+@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
 public class CommandRegistrationCoordinator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandRegistrationCoordinator.class);
