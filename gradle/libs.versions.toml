@@ -4,7 +4,6 @@ spring-plugin-boot = { id = "org.springframework.boot", version.ref = "springBoo
 
 [versions]
 springBoot = "3.1.6"
-springDepman = "1.1.4"
 spotless = "6.22.0"
 ktlint = "1.0.1"
 indra = "3.1.3"
@@ -13,7 +12,6 @@ kotlin = "1.9.20"
 
 checkerQual = "3.40.0"
 apiguardian = "1.1.2"
-immutables = "2.9.2"
 slf4j = "2.0.9"
 cloud = "2.0.0-SNAPSHOT"
 
@@ -24,14 +22,12 @@ jupiter = "5.10.1"
 truth = "1.1.4"
 
 [libraries]
-spring-plugin-depman = { group = "io.spring.dependency-management", name = "io.spring.dependency-management.gradle.plugin", version.ref = "springDepman" }
 spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 indraCommon = { group = "net.kyori", name = "indra-common", version.ref = "indra" }
 gradleKotlinJvm = { group = "org.jetbrains.kotlin.jvm", name = "org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
 
 checkerQual = { group = "org.checkerframework", name = "checker-qual", version.ref = "checkerQual" }
 apiguardian = { group = "org.apiguardian", name = "apiguardian-api", version.ref = "apiguardian" }
-immutables = { group = "org.immutables", name = "value", version.ref = "immutables" }
 slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 
 # Spring

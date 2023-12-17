@@ -1,6 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.incendo.cloud.spring.config.CloudSpringConfig,\
-  org.incendo.cloud.spring.SpringCommandManager,\
-  org.incendo.cloud.spring.registrar.BeanRegistrar,\
-  org.incendo.cloud.spring.registrar.AnnotationRegistrar,\
-  org.incendo.cloud.spring.registrar.CommandRegistrationCoordinator

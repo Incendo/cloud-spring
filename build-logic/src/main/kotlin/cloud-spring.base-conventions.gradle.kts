@@ -4,7 +4,6 @@ plugins {
     id("net.kyori.indra")
     id("net.kyori.indra.checkstyle")
     id("com.diffplug.spotless")
-    id("io.spring.dependency-management")
 }
 
 indra {
@@ -48,11 +47,6 @@ spotless {
 
 // Common dependencies.
 dependencies {
-    implementation(platform(libs.spring.shell.dependencies))
-
-    api(libs.spring.boot.autoconfigure)
-    api(libs.spring.shell)
-
     compileOnlyApi(libs.checkerQual)
     compileOnlyApi(libs.apiguardian)
 

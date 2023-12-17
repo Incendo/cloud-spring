@@ -29,7 +29,7 @@ The example module contains a Spring Boot application with a couple of commands.
 ```xml
 <dependencies>
     <dependency>
-        <groupId>org.incendo.cloud</groupId>
+        <groupId>cloud.commandframework</groupId>
         <artifactId>cloud-spring</artifactId>
         <version>1.0.0</version>
     </dependency>

@@ -11,7 +11,6 @@ dependencies {
     implementation(libs.spotless)
     implementation(libs.indraCommon)
     implementation(libs.gradleKotlinJvm)
-    implementation(libs.spring.plugin.depman)
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

@@ -34,7 +34,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Example of a spring-shell application using cloud-spring.
  */
-@SpringBootApplication(scanBasePackages = "org.incendo.cloud.spring")
+@SpringBootApplication
 public class ExampleApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExampleApplication.class);
