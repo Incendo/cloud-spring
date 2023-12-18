@@ -15,12 +15,6 @@ indra {
     checkstyle(libs.versions.checkstyle.get())
 }
 
-tasks {
-    withType<JavaCompile> {
-        options.compilerArgs.addAll(listOf("-Xlint:-processing", "-Werror"))
-    }
-}
-
 spotless {
     fun FormatExtension.applyCommon(spaces: Int = 4) {
         indentWithSpaces(spaces)
@@ -31,6 +25,8 @@ spotless {
         licenseHeaderFile(rootProject.file("HEADER"))
         importOrderFile(rootProject.file(".spotless/cloud-spring.importorder"))
         applyCommon()
+
+        targetExclude("**/generated/**")
     }
     kotlin {
         licenseHeaderFile(rootProject.file("HEADER"))

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `kotlin-dsl`
     alias(libs.plugins.spotless)
@@ -13,6 +15,19 @@ dependencies {
     implementation(libs.gradleKotlinJvm)
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+}
+
+java {
+    toolchain {
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 spotless {

@@ -28,8 +28,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.incendo.cloud.spring.annotation.CommandGroup;
+import org.jline.utils.AttributedString;
+import org.jline.utils.AttributedStyle;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.shell.jline.PromptProvider;
 
 /**
  * Configuration for the example application.
@@ -48,5 +51,10 @@ public class ExampleConfig {
         annotationParser.registerBuilderModifier(CommandGroup.class,
                 (annotation, builder) -> builder.meta(SpringCommandManager.COMMAND_GROUP_KEY, annotation.value()));
         return annotationParser;
+    }
+
+    @Bean
+    @NonNull PromptProvider myPromptProvider() {
+        return () -> new AttributedString("cat-shell:>", AttributedStyle.DEFAULT.foreground(AttributedStyle.YELLOW));
     }
 }

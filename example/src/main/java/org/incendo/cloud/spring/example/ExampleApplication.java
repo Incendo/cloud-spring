@@ -38,12 +38,6 @@ public class ExampleApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExampleApplication.class);
 
     /**
-     * Example application entrypoint.
-     */
-    public ExampleApplication() {
-    }
-
-    /**
      * Launches the example application.
      *
      * @param args the args

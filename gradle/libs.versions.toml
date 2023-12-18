@@ -1,14 +1,16 @@
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 spring-plugin-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
+graal-native-buildtools = { id = "org.graalvm.buildtools.native", version.ref = "graal" }
 
 [versions]
-springBoot = "3.1.6"
+springBoot = "3.2.0"
 spotless = "6.22.0"
 ktlint = "1.0.1"
 indra = "3.1.3"
 checkstyle = "10.12.5"
 kotlin = "1.9.20"
+graal = "0.9.28"
 
 checkerQual = "3.40.0"
 apiguardian = "1.1.2"
