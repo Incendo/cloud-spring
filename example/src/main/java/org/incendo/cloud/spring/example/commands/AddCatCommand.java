@@ -27,9 +27,12 @@ import cloud.commandframework.Command;
 import cloud.commandframework.CommandBean;
 import cloud.commandframework.CommandProperties;
 import cloud.commandframework.arguments.flags.CommandFlag;
+import cloud.commandframework.arguments.suggestion.SuggestionProvider;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.meta.CommandMeta;
+import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.spring.CloudCompletionProposal;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.incendo.cloud.spring.example.model.Cat;
@@ -70,7 +73,11 @@ public class AddCatCommand extends CommandBean<SpringCommandSender> {
     @Override
     protected Command.Builder<SpringCommandSender> configure(final Command.Builder<SpringCommandSender> builder) {
         return builder.literal("add")
-                .required("name", stringParser())
+                .required("name", stringParser(), SuggestionProvider.blocking((ctx, in) -> List.of(
+                        CloudCompletionProposal.of("Missy").displayText("Missy (A cute cat name)"),
+                        CloudCompletionProposal.of("Donald").displayText("Donald (Old man name = CUTE!)"),
+                        CloudCompletionProposal.of("Fluffy").displayText("Fluffy (A classic :))")
+                )))
                 .flag(CommandFlag.builder("override"))
                 .commandDescription(commandDescription("Add a cat"));
     }

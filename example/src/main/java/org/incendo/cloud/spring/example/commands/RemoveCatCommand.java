@@ -26,8 +26,11 @@ package org.incendo.cloud.spring.example.commands;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandBean;
 import cloud.commandframework.CommandProperties;
+import cloud.commandframework.arguments.suggestion.Suggestion;
+import cloud.commandframework.arguments.suggestion.SuggestionProvider;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.meta.CommandMeta;
+import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
@@ -63,7 +66,10 @@ public class RemoveCatCommand extends CommandBean<SpringCommandSender> {
 
     @Override
     protected Command.Builder<SpringCommandSender> configure(final Command.Builder<SpringCommandSender> builder) {
-        return builder.literal("remove").required("name", stringParser()).commandDescription(commandDescription("Remove a cat"));
+        return builder.literal("remove")
+                .required("name", stringParser(), SuggestionProvider.blocking((ctx, in) ->
+                        this.catService.cats().stream().map(Cat::name).map(Suggestion::simple).collect(Collectors.toList())))
+                .commandDescription(commandDescription("Remove a cat"));
     }
 
     @Override

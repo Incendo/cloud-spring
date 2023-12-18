@@ -8,7 +8,6 @@ Rather, it's a way to use a familiar command framework to quickly & easily creat
 
 Spring Shell uses "options" (what Cloud would call flags) for input, which Cloud does not do.
 We therefore map all arguments to an array of strings, which means that we get access to (nearly) all Cloud features.
-The downside of this approach is that we unfortunately cannot support command completions at the moment.
 
 The example module contains a Spring Boot application with a couple of commands.
 
@@ -16,11 +15,17 @@ The example module contains a Spring Boot application with a couple of commands.
 
 - auto-discovery of `CommandBean` instances as well as `@ScanCommands`-annotated classes
 - support for Spring Shell features such as descriptions and command groups
+
+![descriptions](img/descriptions.png)
+![help](img/help.png)
+
 - configurable by overriding the bean bindings
+- completions!
+
+![completions](img/completions.png)
 
 ## limitations
 
-- no suggestions
 - no intermediate executors (you can do `/cat add` and `/cat remove` but not `/cat`)
 
 ## usage
@@ -92,4 +97,15 @@ public class SomeCommand {
     public void yourCommand() {
     }
 }
+```
+
+### completions
+
+Cloud suggestions will be invoked to provide suggestions for your commands.
+You can use normal suggestions, but we also offer `CloudCompletionProposal` which
+allows you to use rich completions:
+```java
+CloudCompletionProposal.of("proposal")
+    .displayName("with a display name")
+    .category("and a category");
 ```

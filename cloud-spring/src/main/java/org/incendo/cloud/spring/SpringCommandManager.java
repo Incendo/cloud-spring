@@ -24,6 +24,7 @@
 package org.incendo.cloud.spring;
 
 import cloud.commandframework.CommandManager;
+import cloud.commandframework.arguments.suggestion.SuggestionFactory;
 import cloud.commandframework.context.CommandInput;
 import cloud.commandframework.exceptions.ArgumentParseException;
 import cloud.commandframework.exceptions.InvalidCommandSenderException;
@@ -31,18 +32,23 @@ import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.exceptions.NoPermissionException;
 import cloud.commandframework.exceptions.NoSuchCommandException;
 import cloud.commandframework.keys.CloudKey;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.event.CommandExecutionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
+import org.springframework.shell.CompletionContext;
+import org.springframework.shell.CompletionProposal;
+import org.springframework.shell.completion.CompletionResolver;
 import org.springframework.stereotype.Component;
 
 @Component
 @API(status = API.Status.STABLE, since = "1.0.0")
-public class SpringCommandManager<C> extends CommandManager<C> {
+public class SpringCommandManager<C> extends CommandManager<C> implements CompletionResolver {
 
     public static final CloudKey<String> COMMAND_GROUP_KEY = CloudKey.of("group", String.class);
 
@@ -56,6 +62,7 @@ public class SpringCommandManager<C> extends CommandManager<C> {
 
     private final SpringCommandPermissionHandler<C> commandPermissionHandler;
     private final CommandSenderSupplier<C> commandSenderSupplier;
+    private final SuggestionFactory<C, CloudCompletionProposal> suggestionFactory;
 
     /**
      * Creates a new command manager.
@@ -74,6 +81,7 @@ public class SpringCommandManager<C> extends CommandManager<C> {
         super(commandExecutionCoordinatorResolver, commandRegistrationHandler);
         this.commandPermissionHandler = commandPermissionHandler;
         this.commandSenderSupplier = commandSenderSupplier;
+        this.suggestionFactory = super.suggestionFactory().mapped(CloudCompletionProposal::fromSuggestion);
 
         this.registerDefaultExceptionHandlers();
     }
@@ -87,6 +95,23 @@ public class SpringCommandManager<C> extends CommandManager<C> {
     void commandExecutionEvent(final @NonNull CommandExecutionEvent<C> event) {
         final CommandInput commandInput = CommandInput.of(Arrays.asList(event.context().getRawArgs()));
         this.executeCommand(this.commandSenderSupplier.supply(), commandInput.input());
+    }
+
+    @Override
+    public final @NonNull SuggestionFactory<C, ? extends CloudCompletionProposal> suggestionFactory() {
+        return this.suggestionFactory;
+    }
+
+    @Override
+    public final @NonNull List<@NonNull CompletionProposal> apply(final @NonNull CompletionContext completionContext) {
+        final List<String> strings = new ArrayList<>();
+        strings.add(completionContext.getCommandRegistration().getCommand());
+        strings.addAll(completionContext.getWords());
+        final String input = String.join(" ", strings);
+
+        return this.suggestionFactory().suggestImmediately(this.commandSenderSupplier.supply(), input).stream()
+                .map(suggestion -> (CompletionProposal) suggestion)
+                .toList();
     }
 
     private void registerDefaultExceptionHandlers() {
