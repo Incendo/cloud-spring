@@ -25,7 +25,6 @@ package org.incendo.cloud.spring.example;
 
 import cloud.commandframework.annotations.AnnotationParser;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.spring.CommandSenderSupplier;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.incendo.cloud.spring.annotation.CommandGroup;
@@ -37,11 +36,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class ExampleConfig {
-
-    @Bean
-    @NonNull CommandSenderSupplier<SpringCommandSender> commandSenderMapper() {
-        return SpringCommandSender::sender;
-    }
 
     @Bean
     @NonNull AnnotationParser<SpringCommandSender> annotationParser(

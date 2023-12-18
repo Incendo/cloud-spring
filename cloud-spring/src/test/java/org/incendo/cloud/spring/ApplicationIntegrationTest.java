@@ -85,8 +85,8 @@ class ApplicationIntegrationTest {
     static class TestConfig {
 
         @Bean
-        @NonNull CommandSenderSupplier<TestCommandSender> commandSenderSupplier() {
-            return TestCommandSender::new;
+        @NonNull CommandSenderMapper<TestCommandSender> commandSenderSupplier() {
+            return ctx -> new TestCommandSender();
         }
 
         @Bean

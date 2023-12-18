@@ -25,14 +25,17 @@ package org.incendo.cloud.spring;
 
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.shell.command.CommandContext;
 
 @API(status = API.Status.STABLE, since = "1.0.0")
-public interface CommandSenderSupplier<C> {
+public interface CommandSenderMapper<C> {
 
     /**
-     * Supplies the command sender.
+     * Maps the given {@code context} to a command sender of type {@link C}.
      *
+     * @param context the context, will be {@code null} during completions
      * @return the sender
      */
-    @NonNull C supply();
+    @NonNull C map(@Nullable CommandContext context);
 }

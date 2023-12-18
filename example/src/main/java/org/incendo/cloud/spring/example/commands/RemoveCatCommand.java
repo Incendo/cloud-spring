@@ -82,9 +82,10 @@ public class RemoveCatCommand extends CommandBean<SpringCommandSender> {
         final String name = commandContext.get("name");
         final Cat cat = this.catService.removeCat(name);
         if (cat == null) {
+            commandContext.sender().writeLine("No such cat :(");
             LOGGER.error("No such cat :(");
         } else {
-            LOGGER.info("Removed cat {}", cat.name());
+            commandContext.sender().writeLine(String.format("Removed cat: %s", cat.name()));
         }
     }
 }

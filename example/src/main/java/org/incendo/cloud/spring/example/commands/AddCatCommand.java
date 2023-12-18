@@ -71,7 +71,9 @@ public class AddCatCommand extends CommandBean<SpringCommandSender> {
     }
 
     @Override
-    protected Command.Builder<SpringCommandSender> configure(final Command.Builder<SpringCommandSender> builder) {
+    protected Command.@NonNull Builder<SpringCommandSender> configure(
+            final Command.@NonNull Builder<SpringCommandSender> builder
+    ) {
         return builder.literal("add")
                 .required("name", stringParser(), SuggestionProvider.blocking((ctx, in) -> List.of(
                         CloudCompletionProposal.of("Missy").displayText("Missy (A cute cat name)"),
@@ -83,10 +85,10 @@ public class AddCatCommand extends CommandBean<SpringCommandSender> {
     }
 
     @Override
-    public void execute(@NonNull final CommandContext<SpringCommandSender> commandContext) {
+    public void execute(final @NonNull CommandContext<SpringCommandSender> commandContext) {
         final String name = commandContext.get("name");
         final boolean override = commandContext.flags().hasFlag("override");
         final Cat cat = this.catService.addCat(name, override);
-        LOGGER.info("Added cat {}", cat.name());
+        commandContext.sender().writeLine(String.format("Added cat: %s", cat.name()));
     }
 }

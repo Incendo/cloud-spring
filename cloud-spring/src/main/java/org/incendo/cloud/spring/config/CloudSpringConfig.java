@@ -26,7 +26,7 @@ package org.incendo.cloud.spring.config;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.spring.CommandSenderSupplier;
+import org.incendo.cloud.spring.CommandSenderMapper;
 import org.incendo.cloud.spring.SpringCommandExecutionCoordinatorResolver;
 import org.incendo.cloud.spring.SpringCommandPermissionHandler;
 import org.incendo.cloud.spring.SpringCommandSender;
@@ -56,8 +56,8 @@ public class CloudSpringConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(CommandSenderSupplier.class)
-    @NonNull CommandSenderSupplier<?> commandSenderMapper() {
+    @ConditionalOnMissingBean(CommandSenderMapper.class)
+    @NonNull CommandSenderMapper<?> commandSenderMapper() {
         return SpringCommandSender::sender;
     }
 }

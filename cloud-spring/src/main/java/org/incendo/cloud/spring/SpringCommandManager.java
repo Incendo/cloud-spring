@@ -61,7 +61,7 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringCommandManager.class);
 
     private final SpringCommandPermissionHandler<C> commandPermissionHandler;
-    private final CommandSenderSupplier<C> commandSenderSupplier;
+    private final CommandSenderMapper<C> commandSenderMapper;
     private final SuggestionFactory<C, CloudCompletionProposal> suggestionFactory;
 
     /**
@@ -70,17 +70,17 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
      * @param commandExecutionCoordinatorResolver the resolver for the execution coordinator
      * @param commandPermissionHandler the permission handler
      * @param commandRegistrationHandler the registration handler
-     * @param commandSenderSupplier the supplier of the custom command sender type
+     * @param commandSenderMapper the mapper for the custom command sender type
      */
     public SpringCommandManager(
             final @NonNull SpringCommandExecutionCoordinatorResolver<C> commandExecutionCoordinatorResolver,
             final @NonNull SpringCommandPermissionHandler<C> commandPermissionHandler,
             final @NonNull SpringCommandRegistrationHandler<C> commandRegistrationHandler,
-            final @NonNull CommandSenderSupplier<C> commandSenderSupplier
+            final @NonNull CommandSenderMapper<C> commandSenderMapper
     ) {
         super(commandExecutionCoordinatorResolver, commandRegistrationHandler);
         this.commandPermissionHandler = commandPermissionHandler;
-        this.commandSenderSupplier = commandSenderSupplier;
+        this.commandSenderMapper = commandSenderMapper;
         this.suggestionFactory = super.suggestionFactory().mapped(CloudCompletionProposal::fromSuggestion);
 
         this.registerDefaultExceptionHandlers();
@@ -94,7 +94,7 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
     @EventListener(CommandExecutionEvent.class)
     void commandExecutionEvent(final @NonNull CommandExecutionEvent<C> event) {
         final CommandInput commandInput = CommandInput.of(Arrays.asList(event.context().getRawArgs()));
-        this.executeCommand(this.commandSenderSupplier.supply(), commandInput.input());
+        this.executeCommand(this.commandSenderMapper.map(event.context()), commandInput.input());
     }
 
     @Override
@@ -109,7 +109,7 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
         strings.addAll(completionContext.getWords());
         final String input = String.join(" ", strings);
 
-        return this.suggestionFactory().suggestImmediately(this.commandSenderSupplier.supply(), input).stream()
+        return this.suggestionFactory().suggestImmediately(this.commandSenderMapper.map(null), input).stream()
                 .map(suggestion -> (CompletionProposal) suggestion)
                 .toList();
     }
