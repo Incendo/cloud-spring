@@ -89,6 +89,10 @@ public class AddCatCommand extends CommandBean<SpringCommandSender> {
         final String name = commandContext.get("name");
         final boolean override = commandContext.flags().hasFlag("override");
         final Cat cat = this.catService.addCat(name, override);
-        commandContext.sender().writeLine(String.format("Added cat: %s", cat.name()));
+
+        // We can either write the output to the context:
+        commandContext.set(SpringCommandManager.OUTPUT, String.format("Added cat: %s", cat.name()));
+        // or print directly to the terminal:
+        // commandContext.sender().writeLine(String.format("Added cat: %s", cat.name()));
     }
 }

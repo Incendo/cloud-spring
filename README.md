@@ -14,6 +14,7 @@ The example module contains a Spring Boot application with a couple of commands.
 ## features
 
 - auto-discovery of `CommandBean` instances as well as `@ScanCommands`-annotated classes
+- supports both interactive & non-interactive (CLI) commands
 - support for Spring Shell features such as descriptions and command groups
 
 ![descriptions](img/descriptions.png)

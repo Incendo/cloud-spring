@@ -24,8 +24,10 @@
 package org.incendo.cloud.spring.event;
 
 import cloud.commandframework.Command;
+import cloud.commandframework.execution.CommandResult;
 import java.io.Serial;
 import org.apiguardian.api.API;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.shell.command.CommandContext;
@@ -44,6 +46,7 @@ public final class CommandExecutionEvent<C> extends ApplicationEvent {
 
     private final Command<C> command;
     private final CommandContext context;
+    private CommandResult<C> result;
 
     /**
      * Creates a new event.
@@ -73,6 +76,24 @@ public final class CommandExecutionEvent<C> extends ApplicationEvent {
      */
     public @NonNull CommandContext context() {
         return this.context;
+    }
+
+    /**
+     * Returns result of handling the command.
+     *
+     * @return the result, or {@code null} if the event has not been handled
+     */
+    public @MonotonicNonNull CommandResult<C> result() {
+        return this.result;
+    }
+
+    /**
+     * Sets the result.
+     *
+     * @param result the result
+     */
+    public void result(final @NonNull CommandResult<C> result) {
+        this.result = result;
     }
 
     @Override

@@ -28,20 +28,25 @@ import cloud.commandframework.CommandComponent;
 import cloud.commandframework.internal.CommandRegistrationHandler;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.incendo.cloud.spring.event.CommandExecutionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.shell.command.CommandCatalog;
+import org.springframework.shell.command.CommandExceptionResolver;
+import org.springframework.shell.command.CommandHandlingResult;
 import org.springframework.shell.command.CommandRegistration;
 import org.springframework.stereotype.Component;
 
 @Component
 @API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
-public class SpringCommandRegistrationHandler<C> implements CommandRegistrationHandler<C>, ApplicationEventPublisherAware {
+public class SpringCommandRegistrationHandler<C> implements CommandRegistrationHandler<C>, ApplicationEventPublisherAware,
+        CommandExceptionResolver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringCommandRegistrationHandler.class);
 
@@ -74,24 +79,18 @@ public class SpringCommandRegistrationHandler<C> implements CommandRegistrationH
                 .description(command.commandDescription().description().textDescription())
                 .command(literals.toArray(new String[0]))
                 .withTarget()
-                .consumer(context -> {
-                    this.applicationEventPublisher.publishEvent(new CommandExecutionEvent<>(command, context));
+                .function(context -> {
+                    final CommandExecutionEvent<C> event = new CommandExecutionEvent<>(command, context);
+                    this.applicationEventPublisher.publishEvent(event);
+                    return Objects.requireNonNull(event.result(), "result").getCommandContext().getOrDefault(
+                            SpringCommandManager.OUTPUT,
+                            null
+                    );
                 })
-                .and()/*
-                .withOption()
-                .defaultValue(null)
-                .type(String[].class)
-                .longNames("components")
-                .position(0)
-                .arity(CommandRegistration.OptionArity.ONE_OR_MORE)
-                .completion(context -> {
-                    final CommandCompletionEvent<C> commandCompletionEvent = new CommandCompletionEvent<>(command, context);
-                    this.applicationEventPublisher.publishEvent(commandCompletionEvent);
-                    return commandCompletionEvent.suggestions().stream()
-                            .map(suggestion -> new CompletionProposal(suggestion.suggestion()).complete(false).dontQuote(true))
-                            .toList();
-                })
-                .and()*/
+                .and()
+                .withErrorHandling()
+                .resolver(this)
+                .and()
                 .group(command.commandMeta().getOrDefault(SpringCommandManager.COMMAND_GROUP_KEY, null))
                 .build();
         this.commandCatalog.register(registration);
@@ -100,7 +99,15 @@ public class SpringCommandRegistrationHandler<C> implements CommandRegistrationH
     }
 
     @Override
-    public void setApplicationEventPublisher(final @NonNull ApplicationEventPublisher applicationEventPublisher) {
+    public final void setApplicationEventPublisher(final @NonNull ApplicationEventPublisher applicationEventPublisher) {
         this.applicationEventPublisher = applicationEventPublisher;
+    }
+
+    @Override
+    public final @Nullable CommandHandlingResult resolve(final @NonNull Exception exception) {
+        if (exception instanceof FailureIndicationException failure) {
+            return CommandHandlingResult.of("", 1);
+        }
+        return null;
     }
 }

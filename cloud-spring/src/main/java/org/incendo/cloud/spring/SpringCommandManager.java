@@ -31,6 +31,7 @@ import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.exceptions.NoPermissionException;
 import cloud.commandframework.exceptions.NoSuchCommandException;
+import cloud.commandframework.execution.CommandResult;
 import cloud.commandframework.keys.CloudKey;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +52,7 @@ import org.springframework.stereotype.Component;
 public class SpringCommandManager<C> extends CommandManager<C> implements CompletionResolver {
 
     public static final CloudKey<String> COMMAND_GROUP_KEY = CloudKey.of("group", String.class);
+    public static final CloudKey<Object> OUTPUT = CloudKey.of("output", Object.class);
 
     private static final String MESSAGE_INTERNAL_ERROR = "An internal error occurred while attempting to perform this command.";
     private static final String MESSAGE_INVALID_SYNTAX = "Invalid Command Syntax. Correct command syntax is: ";
@@ -94,7 +96,13 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
     @EventListener(CommandExecutionEvent.class)
     void commandExecutionEvent(final @NonNull CommandExecutionEvent<C> event) {
         final CommandInput commandInput = CommandInput.of(Arrays.asList(event.context().getRawArgs()));
-        this.executeCommand(this.commandSenderMapper.map(event.context()), commandInput.input());
+        try {
+            final CommandResult<C> result = this.executeCommand(this.commandSenderMapper.map(event.context()),
+                    commandInput.input()).join();
+            event.result(result);
+        } catch (final Exception e) {
+            throw new FailureIndicationException();
+        }
     }
 
     @Override

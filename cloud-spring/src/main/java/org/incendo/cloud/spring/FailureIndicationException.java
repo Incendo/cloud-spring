@@ -21,34 +21,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-package org.incendo.cloud.spring.example;
+package org.incendo.cloud.spring;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.io.Serial;
+import org.apiguardian.api.API;
+import org.springframework.boot.ExitCodeGenerator;
 
 /**
- * Example of a spring-shell application using cloud-spring.
+ * Exception that indicates that a command execution failed.
+ *
+ * <p>This exception should not be handled, and it only exists so that we can map it to exit codes.</p>
+ *
+ * @since 1.0.0
  */
-@SpringBootApplication
-public class ExampleApplication {
+@API(status = API.Status.INTERNAL, consumers = "org.incendo.cloud.spring.*", since = "1.0.0")
+public class FailureIndicationException extends RuntimeException implements ExitCodeGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExampleApplication.class);
+    @Serial
+    private static final long serialVersionUID = 3164725268923709954L;
 
-    /**
-     * Example application entrypoint.
-     */
-    public ExampleApplication() {
-    }
-
-    /**
-     * Launches the example application.
-     *
-     * @param args the args
-     */
-    public static void main(final @NonNull String @NonNull[] args) {
-        SpringApplication.run(ExampleApplication.class, args);
+    @Override
+    public int getExitCode() {
+        return 1;
     }
 }

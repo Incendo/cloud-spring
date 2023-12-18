@@ -6,6 +6,10 @@ spring:
     application:
         name: cloud-spring-example
 
+    main:
+        log-startup-info: false
+        banner-mode: off
+
 logging:
     level:
-        org.incendo: debug
+        org.incendo: info
