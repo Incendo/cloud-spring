@@ -82,7 +82,7 @@ public class SpringCommandRegistrationHandler<C> implements CommandRegistrationH
                 .function(context -> {
                     final CommandExecutionEvent<C> event = new CommandExecutionEvent<>(command, context);
                     this.applicationEventPublisher.publishEvent(event);
-                    return Objects.requireNonNull(event.result(), "result").getCommandContext().getOrDefault(
+                    return Objects.requireNonNull(event.result(), "result").commandContext().getOrDefault(
                             SpringCommandManager.OUTPUT,
                             null
                     );
