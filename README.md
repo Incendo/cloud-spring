@@ -103,7 +103,19 @@ public class SomeCommand {
     @CommandDescription("A description")
     @CommandMethod("A command")
     public void yourCommand() {
+        // ...
     }
+}
+```
+
+Spring beans can be injected into command methods. You may annotated the injected members with `@Qualifier`:
+```java
+@CommandMethod("command <argument>")
+public void yourCommand(
+        @Argument String argument, 
+        @Qualifier("bean") SomeBean someBean
+) {
+    // ...
 }
 ```
 

@@ -26,6 +26,8 @@ package org.incendo.cloud.spring;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandBean;
 import cloud.commandframework.CommandProperties;
+import cloud.commandframework.context.CommandContext;
+import cloud.commandframework.context.StandardCommandContextFactory;
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.internal.CommandNode;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -62,7 +64,7 @@ class ApplicationIntegrationTest {
     @Test
     @DisplayName("Verify that the command execution coordinator was overridden")
     void testCommandExecutionCoordinator() {
-        assertThat(this.springCommandManager.commandExecutionCoordinator())
+        assertThat(this.springCommandManager.commandExecutor().commandExecutionCoordinator())
                 .isInstanceOf(AsynchronousCommandExecutionCoordinator.class);
     }
 
@@ -74,6 +76,22 @@ class ApplicationIntegrationTest {
 
         // Assert
         assertThat(commandNode).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Verify that unqualified Bean injection works")
+    void testBeanInjection() {
+        // Arrange
+        final CommandContext<TestCommandSender> context = new StandardCommandContextFactory<>(this.springCommandManager).create(
+                false,
+                new TestCommandSender()
+        );
+
+        // Act
+        final TestType result = context.inject(TestType.class).orElseThrow();
+
+        // Assert
+        assertThat(result).isEqualTo(new TestType("foo"));
     }
 
 
@@ -98,9 +116,19 @@ class ApplicationIntegrationTest {
         @NonNull TestCommandBean commandBean() {
             return new TestCommandBean();
         }
+
+        @Bean
+        @NonNull TestType fooBean() {
+            return new TestType("foo");
+        }
     }
 
+
     static class TestCommandSender {
+
+    }
+
+    record TestType(@NonNull String value) {
 
     }
 

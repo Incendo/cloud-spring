@@ -31,7 +31,6 @@ import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.exceptions.NoPermissionException;
 import cloud.commandframework.exceptions.NoSuchCommandException;
-import cloud.commandframework.execution.CommandResult;
 import cloud.commandframework.keys.CloudKey;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +40,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.event.CommandExecutionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.shell.CompletionContext;
 import org.springframework.shell.CompletionProposal;
@@ -73,17 +73,20 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
      * @param commandPermissionHandler the permission handler
      * @param commandRegistrationHandler the registration handler
      * @param commandSenderMapper the mapper for the custom command sender type
+     * @param applicationContext the application context
      */
     public SpringCommandManager(
             final @NonNull SpringCommandExecutionCoordinatorResolver<C> commandExecutionCoordinatorResolver,
             final @NonNull SpringCommandPermissionHandler<C> commandPermissionHandler,
             final @NonNull SpringCommandRegistrationHandler<C> commandRegistrationHandler,
-            final @NonNull CommandSenderMapper<C> commandSenderMapper
+            final @NonNull CommandSenderMapper<C> commandSenderMapper,
+            final @NonNull ApplicationContext applicationContext
     ) {
         super(commandExecutionCoordinatorResolver, commandRegistrationHandler);
         this.commandPermissionHandler = commandPermissionHandler;
         this.commandSenderMapper = commandSenderMapper;
         this.suggestionFactory = super.suggestionFactory().mapped(CloudCompletionProposal::fromSuggestion);
+        this.parameterInjectorRegistry().registerInjectionService(new SpringInjectionService<>(applicationContext));
 
         this.registerDefaultExceptionHandlers();
     }
@@ -97,9 +100,10 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
     void commandExecutionEvent(final @NonNull CommandExecutionEvent<C> event) {
         final CommandInput commandInput = CommandInput.of(Arrays.asList(event.context().getRawArgs()));
         try {
-            final CommandResult<C> result = this.executeCommand(this.commandSenderMapper.map(event.context()),
-                    commandInput.input()).join();
-            event.result(result);
+            event.result(this.commandExecutor().executeCommand(
+                    this.commandSenderMapper.map(event.context()),
+                    commandInput.input()
+            ).join());
         } catch (final Exception e) {
             throw new FailureIndicationException();
         }
