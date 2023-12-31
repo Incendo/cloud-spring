@@ -26,7 +26,9 @@ package org.incendo.cloud.spring.example.commands;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandBean;
 import cloud.commandframework.CommandProperties;
+import cloud.commandframework.arguments.aggregate.AggregateCommandParser;
 import cloud.commandframework.arguments.flags.CommandFlag;
+import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.suggestion.SuggestionProvider;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.meta.CommandMeta;
@@ -42,6 +44,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import static cloud.commandframework.CommandDescription.commandDescription;
+import static cloud.commandframework.arguments.standard.IntegerParser.integerParser;
 import static cloud.commandframework.arguments.standard.StringParser.stringParser;
 
 @Component
@@ -74,21 +77,28 @@ public class AddCatCommand extends CommandBean<SpringCommandSender> {
     protected Command.@NonNull Builder<SpringCommandSender> configure(
             final Command.@NonNull Builder<SpringCommandSender> builder
     ) {
-        return builder.literal("add")
-                .required("name", stringParser(), SuggestionProvider.blocking((ctx, in) -> List.of(
+        final AggregateCommandParser<SpringCommandSender, Cat> catParser = AggregateCommandParser.<SpringCommandSender>builder()
+                .withComponent("name", stringParser(), SuggestionProvider.blocking((ctx, in) -> List.of(
                         CloudCompletionProposal.of("Missy").displayText("Missy (A cute cat name)"),
                         CloudCompletionProposal.of("Donald").displayText("Donald (Old man name = CUTE!)"),
                         CloudCompletionProposal.of("Fluffy").displayText("Fluffy (A classic :))")
                 )))
+                .withComponent("age", integerParser(0))
+                .withDirectMapper(Cat.class, (cmxCtx, ctx) -> ArgumentParseResult.success(new Cat(ctx.get("name"),
+                        ctx.get("age"))))
+                .build();
+
+        return builder.literal("add")
+                .required("cat", catParser)
                 .flag(CommandFlag.builder("override"))
                 .commandDescription(commandDescription("Add a cat"));
     }
 
     @Override
     public void execute(final @NonNull CommandContext<SpringCommandSender> commandContext) {
-        final String name = commandContext.get("name");
+        final Cat cat = commandContext.get("cat");
         final boolean override = commandContext.flags().hasFlag("override");
-        final Cat cat = this.catService.addCat(name, override);
+        this.catService.addCat(cat, override);
 
         // We can either write the output to the context:
         commandContext.set(SpringCommandManager.OUTPUT, String.format("Added cat: %s", cat.name()));

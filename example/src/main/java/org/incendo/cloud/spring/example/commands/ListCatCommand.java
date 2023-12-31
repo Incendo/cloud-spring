@@ -61,6 +61,6 @@ public class ListCatCommand {
     @CommandMethod("cat list")
     public void listCats(final @NonNull SpringCommandSender sender) {
         sender.writeLine("Cats");
-        this.catService.cats().forEach(cat -> sender.writeLine(String.format("- %s", cat.name())));
+        this.catService.cats().forEach(cat -> sender.writeLine(String.format("- %s (Age: %d)", cat.name(), cat.age())));
     }
 }

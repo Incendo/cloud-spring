@@ -23,13 +23,15 @@
 //
 package org.incendo.cloud.spring.example.model;
 
+import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A kitty.
  *
  * @param name the name of the cat
+ * @param age the age of the cat
  */
-public record Cat(@NonNull String name) {
+public record Cat(@NonNull String name, @NonNegative int age) {
 
 }

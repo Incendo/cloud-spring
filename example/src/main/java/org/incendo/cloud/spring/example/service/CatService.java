@@ -47,17 +47,14 @@ public class CatService {
     /**
      * Adds a cat with the given {@code name}.
      *
-     * @param name the cat
+     * @param cat the cat
      * @param override whether to override an existing cat
-     * @return the cat
      */
-    public Cat addCat(final @NonNull String name, final boolean override) {
-        final Cat cat = new Cat(name);
+    public void addCat(final @NonNull Cat cat, final boolean override) {
         if (override) {
-            this.removeCat(name);
+            this.removeCat(cat.name());
         }
         this.catRepository.addCat(cat);
-        return cat;
     }
 
     /**

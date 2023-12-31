@@ -31,6 +31,7 @@ import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.exceptions.NoPermissionException;
 import cloud.commandframework.exceptions.NoSuchCommandException;
+import cloud.commandframework.execution.FilteringCommandSuggestionProcessor;
 import cloud.commandframework.keys.CloudKey;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,6 +88,9 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
         this.commandSenderMapper = commandSenderMapper;
         this.suggestionFactory = super.suggestionFactory().mapped(CloudCompletionProposal::fromSuggestion);
         this.parameterInjectorRegistry().registerInjectionService(new SpringInjectionService<>(applicationContext));
+        this.commandSuggestionProcessor(new FilteringCommandSuggestionProcessor<>(
+                FilteringCommandSuggestionProcessor.Filter.<C>startsWith(true).andTrimBeforeLastSpace()
+        ));
 
         this.registerDefaultExceptionHandlers();
     }
