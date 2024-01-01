@@ -28,7 +28,7 @@ import cloud.commandframework.CommandBean;
 import cloud.commandframework.CommandProperties;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.context.StandardCommandContextFactory;
-import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.execution.ExecutionCoordinator;
 import cloud.commandframework.internal.CommandNode;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.DisplayName;
@@ -59,13 +59,6 @@ class ApplicationIntegrationTest {
     void test() {
         assertThat(this.applicationContext).isNotNull();
         assertThat(this.springCommandManager).isNotNull();
-    }
-
-    @Test
-    @DisplayName("Verify that the command execution coordinator was overridden")
-    void testCommandExecutionCoordinator() {
-        assertThat(this.springCommandManager.commandExecutor().commandExecutionCoordinator())
-                .isInstanceOf(AsynchronousCommandExecutionCoordinator.class);
     }
 
     @Test
@@ -108,8 +101,8 @@ class ApplicationIntegrationTest {
         }
 
         @Bean
-        @NonNull SpringCommandExecutionCoordinatorResolver<TestCommandSender> commandExecutionCoordinatorResolver() {
-            return AsynchronousCommandExecutionCoordinator.<TestCommandSender>builder().withAsynchronousParsing().build()::apply;
+        @NonNull ExecutionCoordinator<TestCommandSender> executionCoordinator() {
+            return ExecutionCoordinator.asyncCoordinator();
         }
 
         @Bean

@@ -23,11 +23,10 @@
 //
 package org.incendo.cloud.spring.config;
 
-import cloud.commandframework.execution.CommandExecutionCoordinator;
+import cloud.commandframework.execution.ExecutionCoordinator;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.spring.CommandSenderMapper;
-import org.incendo.cloud.spring.SpringCommandExecutionCoordinatorResolver;
 import org.incendo.cloud.spring.SpringCommandPermissionHandler;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -50,9 +49,9 @@ public class CloudSpringConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(SpringCommandExecutionCoordinatorResolver.class)
-    @NonNull SpringCommandExecutionCoordinatorResolver<?> commandExecutionCoordinatorResolver() {
-        return CommandExecutionCoordinator.simpleCoordinator()::apply;
+    @ConditionalOnMissingBean(ExecutionCoordinator.class)
+    @NonNull ExecutionCoordinator<?> executionCoordinator() {
+        return ExecutionCoordinator.simpleCoordinator();
     }
 
     @Bean

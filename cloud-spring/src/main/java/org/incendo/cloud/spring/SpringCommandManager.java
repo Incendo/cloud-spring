@@ -25,14 +25,16 @@ package org.incendo.cloud.spring;
 
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.suggestion.SuggestionFactory;
+import cloud.commandframework.arguments.suggestion.Suggestions;
 import cloud.commandframework.context.CommandInput;
 import cloud.commandframework.exceptions.ArgumentParseException;
 import cloud.commandframework.exceptions.InvalidCommandSenderException;
 import cloud.commandframework.exceptions.InvalidSyntaxException;
 import cloud.commandframework.exceptions.NoPermissionException;
 import cloud.commandframework.exceptions.NoSuchCommandException;
-import cloud.commandframework.execution.FilteringCommandSuggestionProcessor;
+import cloud.commandframework.execution.ExecutionCoordinator;
 import cloud.commandframework.keys.CloudKey;
+import cloud.commandframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,27 +72,24 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
     /**
      * Creates a new command manager.
      *
-     * @param commandExecutionCoordinatorResolver the resolver for the execution coordinator
+     * @param executionCoordinator the execution coordinator
      * @param commandPermissionHandler the permission handler
      * @param commandRegistrationHandler the registration handler
      * @param commandSenderMapper the mapper for the custom command sender type
      * @param applicationContext the application context
      */
     public SpringCommandManager(
-            final @NonNull SpringCommandExecutionCoordinatorResolver<C> commandExecutionCoordinatorResolver,
+            final @NonNull ExecutionCoordinator<C> executionCoordinator,
             final @NonNull SpringCommandPermissionHandler<C> commandPermissionHandler,
             final @NonNull SpringCommandRegistrationHandler<C> commandRegistrationHandler,
             final @NonNull CommandSenderMapper<C> commandSenderMapper,
             final @NonNull ApplicationContext applicationContext
     ) {
-        super(commandExecutionCoordinatorResolver, commandRegistrationHandler);
+        super(executionCoordinator, commandRegistrationHandler);
         this.commandPermissionHandler = commandPermissionHandler;
         this.commandSenderMapper = commandSenderMapper;
         this.suggestionFactory = super.suggestionFactory().mapped(CloudCompletionProposal::fromSuggestion);
         this.parameterInjectorRegistry().registerInjectionService(new SpringInjectionService<>(applicationContext));
-        this.commandSuggestionProcessor(new FilteringCommandSuggestionProcessor<>(
-                FilteringCommandSuggestionProcessor.Filter.<C>startsWith(true).andTrimBeforeLastSpace()
-        ));
 
         this.registerDefaultExceptionHandlers();
     }
@@ -125,7 +124,12 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
         strings.addAll(completionContext.getWords());
         final String input = String.join(" ", strings);
 
-        return this.suggestionFactory().suggestImmediately(this.commandSenderMapper.map(null), input).stream()
+        final Suggestions<C, ? extends CompletionProposal> suggestions =
+                this.suggestionFactory.suggestImmediately(this.commandSenderMapper.map(null), input);
+        return suggestions.list()
+                .stream()
+                .map(suggestion -> suggestion.withSuggestion(StringUtils.trimBeforeLastSpace(suggestion.suggestion(),
+                        suggestions.commandInput())))
                 .map(suggestion -> (CompletionProposal) suggestion)
                 .toList();
     }
