@@ -1,5 +1,6 @@
 plugins {
-    id("cloud-spring.parent-build-logic")
+    alias(libs.plugins.cloud.buildLogic.rootProject.publishing)
+    alias(libs.plugins.cloud.buildLogic.rootProject.spotless)
 }
 
 spotlessPredeclare {

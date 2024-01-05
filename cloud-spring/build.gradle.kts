@@ -17,7 +17,7 @@ dependencies {
     api(libs.spring.shell)
     api(platform(libs.spring.shell.dependencies))
 
-    compileOnlyApi(libs.cloud.annotations)
+    compileOnly(libs.cloud.annotations)
 
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.shell.test)
