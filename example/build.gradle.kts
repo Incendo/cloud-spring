@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.graal.native.buildtools)
 }
 
-apply(plugin = "io.spring.dependency-management")
+plugins.apply("io.spring.dependency-management")
 
 graalvmNative {
     binaries.all {
@@ -26,14 +26,18 @@ graalvmNative {
     toolchainDetection = false
 }
 
-java {
-    toolchain {
-        targetCompatibility = JavaVersion.VERSION_17
-        sourceCompatibility = JavaVersion.VERSION_17
-    }
-}
-
 dependencies {
     implementation(project(":cloud-spring"))
     implementation(libs.cloud.annotations)
+}
+
+spotless {
+    java {
+        targetExclude("build/generated/**")
+    }
+}
+
+tasks.compileAotJava {
+    // I couldn't figure out the warnings in generated code
+    options.compilerArgs.clear()
 }
