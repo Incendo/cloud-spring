@@ -78,6 +78,7 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
      * @param commandSenderMapper the mapper for the custom command sender type
      * @param applicationContext the application context
      */
+    @SuppressWarnings("this-escape")
     public SpringCommandManager(
             final @NonNull ExecutionCoordinator<C> executionCoordinator,
             final @NonNull SpringCommandPermissionHandler<C> commandPermissionHandler,
