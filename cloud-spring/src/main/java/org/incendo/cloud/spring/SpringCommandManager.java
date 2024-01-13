@@ -144,6 +144,6 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
                 .registerHandler(NoPermissionException.class, ctx -> LOGGER.error(MESSAGE_NO_PERMS))
                 .registerHandler(InvalidCommandSenderException.class, ctx -> LOGGER.error(ctx.exception().getMessage()))
                 .registerHandler(InvalidSyntaxException.class,
-                        ctx -> LOGGER.error(MESSAGE_INVALID_SYNTAX + ctx.exception().getCorrectSyntax()));
+                        ctx -> LOGGER.error(MESSAGE_INVALID_SYNTAX + ctx.exception().correctSyntax()));
     }
 }
