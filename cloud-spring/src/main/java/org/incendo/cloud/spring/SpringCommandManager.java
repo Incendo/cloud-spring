@@ -78,6 +78,7 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
      * @param commandSenderMapper the mapper for the custom command sender type
      * @param applicationContext the application context
      */
+    @SuppressWarnings("this-escape")
     public SpringCommandManager(
             final @NonNull ExecutionCoordinator<C> executionCoordinator,
             final @NonNull SpringCommandPermissionHandler<C> commandPermissionHandler,
@@ -143,6 +144,6 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
                 .registerHandler(NoPermissionException.class, ctx -> LOGGER.error(MESSAGE_NO_PERMS))
                 .registerHandler(InvalidCommandSenderException.class, ctx -> LOGGER.error(ctx.exception().getMessage()))
                 .registerHandler(InvalidSyntaxException.class,
-                        ctx -> LOGGER.error(MESSAGE_INVALID_SYNTAX + ctx.exception().getCorrectSyntax()));
+                        ctx -> LOGGER.error(MESSAGE_INVALID_SYNTAX + ctx.exception().correctSyntax()));
     }
 }

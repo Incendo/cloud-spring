@@ -2,10 +2,13 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
-        mavenCentral()
         gradlePluginPortal()
     }
-    includeBuild("build-logic")
+    includeBuild("gradle/build-logic")
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
 }
 
 dependencyResolutionManagement {
