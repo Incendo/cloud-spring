@@ -26,7 +26,7 @@ package org.incendo.cloud.spring.example.commands;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandBean;
 import cloud.commandframework.CommandProperties;
-import cloud.commandframework.arguments.aggregate.AggregateCommandParser;
+import cloud.commandframework.arguments.aggregate.AggregateParser;
 import cloud.commandframework.arguments.flags.CommandFlag;
 import cloud.commandframework.arguments.parser.ArgumentParseResult;
 import cloud.commandframework.arguments.suggestion.SuggestionProvider;
@@ -77,7 +77,7 @@ public class AddCatCommand extends CommandBean<SpringCommandSender> {
     protected Command.@NonNull Builder<SpringCommandSender> configure(
             final Command.@NonNull Builder<SpringCommandSender> builder
     ) {
-        final AggregateCommandParser<SpringCommandSender, Cat> catParser = AggregateCommandParser.<SpringCommandSender>builder()
+        final AggregateParser<SpringCommandSender, Cat> catParser = AggregateParser.<SpringCommandSender>builder()
                 .withComponent("name", stringParser(), SuggestionProvider.blocking((ctx, in) -> List.of(
                         CloudCompletionProposal.of("Missy").displayText("Missy (A cute cat name)"),
                         CloudCompletionProposal.of("Donald").displayText("Donald (Old man name = CUTE!)"),
