@@ -16,7 +16,7 @@ graal = "0.9.28"
 slf4j = "2.0.11"
 cloud = "2.0.0-SNAPSHOT"
 
-springShellBom = "3.2.0"
+springShellBom = "3.2.1"
 
 # Test
 truth = "1.3.0"
