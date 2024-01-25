@@ -23,15 +23,15 @@
 //
 package org.incendo.cloud.spring;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandComponent;
-import cloud.commandframework.internal.CommandRegistrationHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.component.CommandComponent;
+import org.incendo.cloud.internal.CommandRegistrationHandler;
 import org.incendo.cloud.spring.event.CommandExecutionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

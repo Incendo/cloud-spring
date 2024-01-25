@@ -23,24 +23,24 @@
 //
 package org.incendo.cloud.spring;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.arguments.suggestion.SuggestionFactory;
-import cloud.commandframework.arguments.suggestion.Suggestions;
-import cloud.commandframework.context.CommandInput;
-import cloud.commandframework.exceptions.ArgumentParseException;
-import cloud.commandframework.exceptions.InvalidCommandSenderException;
-import cloud.commandframework.exceptions.InvalidSyntaxException;
-import cloud.commandframework.exceptions.NoPermissionException;
-import cloud.commandframework.exceptions.NoSuchCommandException;
-import cloud.commandframework.execution.ExecutionCoordinator;
-import cloud.commandframework.keys.CloudKey;
-import cloud.commandframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.exception.ArgumentParseException;
+import org.incendo.cloud.exception.InvalidCommandSenderException;
+import org.incendo.cloud.exception.InvalidSyntaxException;
+import org.incendo.cloud.exception.NoPermissionException;
+import org.incendo.cloud.exception.NoSuchCommandException;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.key.CloudKey;
 import org.incendo.cloud.spring.event.CommandExecutionEvent;
+import org.incendo.cloud.suggestion.SuggestionFactory;
+import org.incendo.cloud.suggestion.Suggestions;
+import org.incendo.cloud.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -143,7 +143,8 @@ public class SpringCommandManager<C> extends CommandManager<C> implements Comple
                 .registerHandler(NoSuchCommandException.class, ctx -> LOGGER.error(MESSAGE_UNKNOWN_COMMAND))
                 .registerHandler(NoPermissionException.class, ctx -> LOGGER.error(MESSAGE_NO_PERMS))
                 .registerHandler(InvalidCommandSenderException.class, ctx -> LOGGER.error(ctx.exception().getMessage()))
-                .registerHandler(InvalidSyntaxException.class,
+                .registerHandler(
+                        InvalidSyntaxException.class,
                         ctx -> LOGGER.error(MESSAGE_INVALID_SYNTAX + ctx.exception().correctSyntax()));
     }
 }

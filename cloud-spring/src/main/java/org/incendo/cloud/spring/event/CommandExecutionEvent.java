@@ -23,12 +23,12 @@
 //
 package org.incendo.cloud.spring.event;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.execution.CommandResult;
 import java.io.Serial;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.execution.CommandResult;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.shell.command.CommandContext;
 

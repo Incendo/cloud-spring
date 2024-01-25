@@ -23,8 +23,8 @@
 //
 package org.incendo.cloud.spring.example;
 
-import cloud.commandframework.annotations.AnnotationParser;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.incendo.cloud.spring.annotation.CommandGroup;

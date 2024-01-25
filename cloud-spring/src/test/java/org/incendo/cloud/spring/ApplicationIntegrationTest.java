@@ -23,14 +23,14 @@
 //
 package org.incendo.cloud.spring;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandBean;
-import cloud.commandframework.CommandProperties;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.context.StandardCommandContextFactory;
-import cloud.commandframework.execution.ExecutionCoordinator;
-import cloud.commandframework.internal.CommandNode;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.bean.CommandBean;
+import org.incendo.cloud.bean.CommandProperties;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.context.StandardCommandContextFactory;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.internal.CommandNode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -23,10 +23,10 @@
 //
 package org.incendo.cloud.spring;
 
-import cloud.commandframework.arguments.suggestion.Suggestion;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.cloud.suggestion.Suggestion;
 import org.springframework.shell.CompletionProposal;
 
 @API(status = API.Status.STABLE, since = "1.0.0")

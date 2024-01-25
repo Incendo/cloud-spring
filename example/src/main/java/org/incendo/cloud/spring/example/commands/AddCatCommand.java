@@ -23,29 +23,29 @@
 //
 package org.incendo.cloud.spring.example.commands;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandBean;
-import cloud.commandframework.CommandProperties;
-import cloud.commandframework.arguments.aggregate.AggregateParser;
-import cloud.commandframework.arguments.flags.CommandFlag;
-import cloud.commandframework.arguments.parser.ArgumentParseResult;
-import cloud.commandframework.arguments.suggestion.SuggestionProvider;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.meta.CommandMeta;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.bean.CommandBean;
+import org.incendo.cloud.bean.CommandProperties;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.meta.CommandMeta;
+import org.incendo.cloud.parser.ArgumentParseResult;
+import org.incendo.cloud.parser.aggregate.AggregateParser;
+import org.incendo.cloud.parser.flag.CommandFlag;
 import org.incendo.cloud.spring.CloudCompletionProposal;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.incendo.cloud.spring.example.model.Cat;
 import org.incendo.cloud.spring.example.service.CatService;
+import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import static cloud.commandframework.CommandDescription.commandDescription;
-import static cloud.commandframework.arguments.standard.IntegerParser.integerParser;
-import static cloud.commandframework.arguments.standard.StringParser.stringParser;
+import static org.incendo.cloud.description.CommandDescription.commandDescription;
+import static org.incendo.cloud.parser.standard.IntegerParser.integerParser;
+import static org.incendo.cloud.parser.standard.StringParser.stringParser;
 
 @Component
 public class AddCatCommand extends CommandBean<SpringCommandSender> {

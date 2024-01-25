@@ -23,9 +23,9 @@
 //
 package org.incendo.cloud.spring.config;
 
-import cloud.commandframework.execution.ExecutionCoordinator;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.spring.CommandSenderMapper;
 import org.incendo.cloud.spring.SpringCommandPermissionHandler;
 import org.incendo.cloud.spring.SpringCommandSender;

@@ -23,17 +23,17 @@
 //
 package org.incendo.cloud.spring;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandBean;
-import cloud.commandframework.CommandDescription;
-import cloud.commandframework.CommandProperties;
-import cloud.commandframework.arguments.flags.CommandFlag;
-import cloud.commandframework.context.CommandContext;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.bean.CommandBean;
+import org.incendo.cloud.bean.CommandProperties;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.description.CommandDescription;
+import org.incendo.cloud.parser.flag.CommandFlag;
 import org.incendo.cloud.spring.config.CloudSpringConfig;
 import org.incendo.cloud.spring.registrar.BeanRegistrar;
 import org.incendo.cloud.spring.registrar.CommandRegistrationCoordinator;
@@ -48,10 +48,10 @@ import org.springframework.shell.test.ShellTestClient;
 import org.springframework.shell.test.autoconfigure.ShellTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import static cloud.commandframework.arguments.standard.IntegerParser.integerParser;
-import static cloud.commandframework.arguments.standard.StringParser.stringParser;
 import static com.google.common.truth.Truth.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.incendo.cloud.parser.standard.IntegerParser.integerParser;
+import static org.incendo.cloud.parser.standard.StringParser.stringParser;
 
 @Import(CloudSpringConfig.class)
 @ContextConfiguration(classes = {

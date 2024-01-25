@@ -23,10 +23,10 @@
 //
 package org.incendo.cloud.spring.registrar;
 
-import cloud.commandframework.CommandBean;
 import java.util.List;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.bean.CommandBean;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.springframework.stereotype.Component;
 

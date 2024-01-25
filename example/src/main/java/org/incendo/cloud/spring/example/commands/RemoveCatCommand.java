@@ -23,25 +23,25 @@
 //
 package org.incendo.cloud.spring.example.commands;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandBean;
-import cloud.commandframework.CommandProperties;
-import cloud.commandframework.arguments.suggestion.Suggestion;
-import cloud.commandframework.arguments.suggestion.SuggestionProvider;
-import cloud.commandframework.context.CommandContext;
-import cloud.commandframework.meta.CommandMeta;
 import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.bean.CommandBean;
+import org.incendo.cloud.bean.CommandProperties;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.meta.CommandMeta;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.SpringCommandSender;
 import org.incendo.cloud.spring.example.model.Cat;
 import org.incendo.cloud.spring.example.service.CatService;
+import org.incendo.cloud.suggestion.Suggestion;
+import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import static cloud.commandframework.CommandDescription.commandDescription;
-import static cloud.commandframework.arguments.standard.StringParser.stringParser;
+import static org.incendo.cloud.description.CommandDescription.commandDescription;
+import static org.incendo.cloud.parser.standard.StringParser.stringParser;
 
 @Component
 public class RemoveCatCommand extends CommandBean<SpringCommandSender> {

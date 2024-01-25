@@ -14,7 +14,7 @@ kotlin = "1.9.22"
 graal = "0.9.28"
 
 slf4j = "2.0.11"
-cloud = "2.0.0-SNAPSHOT"
+cloud = "2.0.0-beta.1"
 
 springShellBom = "3.2.1"
 
@@ -38,8 +38,8 @@ spring-shell-test = { group = "org.springframework.shell", name = "spring-shell-
 spring-shell-test-autoconfiguration = { group = "org.springframework.shell", name = "spring-shell-test-autoconfigure" }
 
 # Cloud
-cloud-core = { group = "cloud.commandframework", name = "cloud-core", version.ref = "cloud" }
-cloud-annotations = { group = "cloud.commandframework", name = "cloud-annotations", version.ref = "cloud" }
+cloud-core = { group = "org.incendo", name = "cloud-core", version.ref = "cloud" }
+cloud-annotations = { group = "org.incendo", name = "cloud-annotations", version.ref = "cloud" }
 
 # Test
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }

@@ -23,10 +23,10 @@
 //
 package org.incendo.cloud.spring.registrar;
 
-import cloud.commandframework.annotations.AnnotationParser;
 import java.util.Collection;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.spring.SpringCommandManager;
 import org.incendo.cloud.spring.annotation.ScanCommands;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

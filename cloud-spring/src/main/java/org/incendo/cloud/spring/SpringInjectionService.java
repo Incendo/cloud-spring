@@ -23,11 +23,11 @@
 //
 package org.incendo.cloud.spring;
 
-import cloud.commandframework.annotations.injection.InjectionRequest;
-import cloud.commandframework.annotations.injection.InjectionService;
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.cloud.injection.InjectionRequest;
+import org.incendo.cloud.injection.InjectionService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Qualifier;
