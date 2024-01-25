@@ -14,7 +14,7 @@ kotlin = "1.9.22"
 graal = "0.9.28"
 
 slf4j = "2.0.11"
-cloud = "2.0.0-beta.1"
+cloud = "2.0.0-SNAPSHOT"
 
 springShellBom = "3.2.1"
 
