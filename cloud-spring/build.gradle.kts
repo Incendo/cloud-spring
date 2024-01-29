@@ -1,4 +1,3 @@
-import org.incendo.cloudbuildlogic.JavadocLinksExtension
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -36,14 +35,14 @@ configurations.javadocLinksJavadoc {
 javadocLinks {
     // No Javadocs on central
     excludes.addAll(
-            "org.hibernate.validator",
-            "org.springframework.boot:spring-boot-starter",
-            "org.springframework.boot:spring-boot-starter-logging",
-            "org.springframework.shell:spring-shell-table",
-            "org.springframework.shell:spring-shell-starter",
-            "org.springframework.shell:spring-shell-standard-commands",
-            "org.apache.tomcat.embed",
-            "org.jline:jline-native",
-            "org.apache.logging.log4j:log4j-to-slf4j",
+        "org.hibernate.validator",
+        "org.springframework.boot:spring-boot-starter",
+        "org.springframework.boot:spring-boot-starter-logging",
+        "org.springframework.shell:spring-shell-table",
+        "org.springframework.shell:spring-shell-starter",
+        "org.springframework.shell:spring-shell-standard-commands",
+        "org.apache.tomcat.embed",
+        "org.jline:jline-native",
+        "org.apache.logging.log4j:log4j-to-slf4j",
     )
 }
