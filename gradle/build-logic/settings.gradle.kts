@@ -3,6 +3,12 @@ rootProject.name = "build-logic"
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        maven("https://oss.sonatype.org/content/repositories/snapshots/") {
+            name = "sonatypeOssSnapshots"
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
     }
 }
 
