@@ -20,7 +20,7 @@ springShellBom = "3.2.1"
 
 # Test
 truth = "1.4.0"
-awaitility = "4.2.0"
+awaitility = "4.2.1"
 
 [libraries]
 cloud-build-logic = { module = "org.incendo:cloud-build-logic", version.ref = "cloud-build-logic" }
