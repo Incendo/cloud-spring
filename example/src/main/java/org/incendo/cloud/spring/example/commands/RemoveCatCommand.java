@@ -68,7 +68,7 @@ public class RemoveCatCommand extends CommandBean<SpringCommandSender> {
     protected Command.Builder<SpringCommandSender> configure(final Command.Builder<SpringCommandSender> builder) {
         return builder.literal("remove")
                 .required("name", stringParser(), SuggestionProvider.blocking((ctx, in) ->
-                        this.catService.cats().stream().map(Cat::name).map(Suggestion::simple).collect(Collectors.toList())))
+                        this.catService.cats().stream().map(Cat::name).map(Suggestion::suggestion).collect(Collectors.toList())))
                 .commandDescription(commandDescription("Remove a cat"));
     }
 

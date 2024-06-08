@@ -30,7 +30,6 @@ import org.incendo.cloud.bean.CommandBean;
 import org.incendo.cloud.bean.CommandProperties;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.meta.CommandMeta;
-import org.incendo.cloud.parser.ArgumentParseResult;
 import org.incendo.cloud.parser.aggregate.AggregateParser;
 import org.incendo.cloud.parser.flag.CommandFlag;
 import org.incendo.cloud.spring.CloudCompletionProposal;
@@ -84,8 +83,7 @@ public class AddCatCommand extends CommandBean<SpringCommandSender> {
                         CloudCompletionProposal.of("Fluffy").displayText("Fluffy (A classic :))")
                 )))
                 .withComponent("age", integerParser(0))
-                .withDirectMapper(Cat.class, (cmxCtx, ctx) -> ArgumentParseResult.success(new Cat(ctx.get("name"),
-                        ctx.get("age"))))
+                .withDirectMapper(Cat.class, (cmxCtx, ctx) -> new Cat(ctx.get("name"), ctx.get("age")))
                 .build();
 
         return builder.literal("add")

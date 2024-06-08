@@ -126,7 +126,7 @@ public class ShellIntegrationTest {
         protected Command.Builder<SpringCommandSender> configure(final Command.Builder<SpringCommandSender> builder) {
             return builder.commandDescription(CommandDescription.commandDescription("Description!"))
                     .required("string", stringParser())
-                    .flag(CommandFlag.builder("flag").withComponent(integerParser()));
+                    .flag(CommandFlag.builder("flag").withComponent(integerParser()).build());
         }
 
         @Override
