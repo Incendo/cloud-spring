@@ -19,7 +19,7 @@ cloud = "2.0.0-rc.2"
 springShellBom = "3.3.0"
 
 # Test
-truth = "1.4.2"
+truth = "1.4.4"
 awaitility = "4.2.1"
 
 [libraries]
