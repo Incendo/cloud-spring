@@ -42,6 +42,7 @@ javadocLinks {
         "org.springframework.shell:spring-shell-starter",
         "org.springframework.shell:spring-shell-standard-commands",
         "org.apache.tomcat.embed",
+        "org.jline:jline-console",
         "org.jline:jline-native",
         "org.apache.logging.log4j:log4j-to-slf4j",
     )

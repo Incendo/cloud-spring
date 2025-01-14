@@ -29,3 +29,11 @@ dependencies {
     testImplementation(libs.truth)
     testImplementation(libs.awaitility)
 }
+
+tasks {
+    jar {
+        manifest {
+            attributes("Automatic-Module-Name" to "%s.%s".format(project.group, project.name.replace('-', '.')))
+        }
+    }
+}
